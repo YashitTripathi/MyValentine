@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Will You Be My Valentine?</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+height:100vh;
+overflow:hidden;
+display:flex;
+justify-content:center;
+align-items:center;
+text-align:center;
+background:linear-gradient(to bottom right,#ffd1dc,#ff4d6d);
+position:relative;
+color:#fff;
+}
+
+.container{
+z-index:2;
+padding:20px;
+}
+
+.bear{
+font-size:60px;
+animation:bounce 1.5s infinite;
+}
+
+@keyframes bounce{
+0%,100%{transform:translateY(0)}
+50%{transform:translateY(-20px)}
+}
+
+h1{
+font-family:'Dancing Script',cursive;
+font-size:42px;
+margin:20px 0;
+}
+
+.subtitle{
+font-style:italic;
+margin-bottom:15px;
+}
+
+.closing{
+margin:15px 0 25px;
+}
+
+.buttons{
+display:flex;
+justify-content:center;
+gap:40px;
+margin-top:20px;
+}
+
+button{
+cursor:pointer;
+transition:0.3s;
+}
+
+#yesBtn{
+background:linear-gradient(to right,#ff0000,#ff4d4d);
+color:#fff;
+border:none;
+padding:15px 40px;
+font-size:20px;
+border-radius:50px;
+box-shadow:0 0 10px rgba(255,0,0,0.6);
+}
+
+#yesBtn:hover{
+box-shadow:0 0 25px rgba(255,0,0,1);
+transform:scale(1.1);
+}
+
+#noBtn{
+background:#fff;
+color:#ff0000;
+border:2px solid #ff0000;
+padding:10px 25px;
+border-radius:25px;
+position:relative;
+}
+
+.heart{
+position:absolute;
+bottom:-50px;
+animation:floatUp linear infinite;
+}
+
+@keyframes floatUp{
+0%{transform:translateY(0);opacity:0}
+10%{opacity:1}
+90%{opacity:1}
+100%{transform:translateY(-110vh);opacity:0}
+}
+
+.celebration{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:linear-gradient(to bottom right,#ff4d6d,#ff1a1a);
+display:none;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+z-index:5;
+text-align:center;
+}
+
+.yay{
+font-size:60px;
+animation:pulse 1s infinite;
+}
+
+@keyframes pulse{
+0%,100%{transform:scale(1)}
+50%{transform:scale(1.2)}
+}
+
+.spin{
+font-size:60px;
+animation:spin 2s linear infinite;
+}
+
+@keyframes spin{
+100%{transform:rotate(360deg)}
+}
+
+.confetti{
+position:fixed;
+width:10px;
+height:10px;
+background:red;
+top:0;
+opacity:0.8;
+animation:fall 3s linear forwards;
+}
+
+@keyframes fall{
+to{
+transform:translateY(100vh) rotate(720deg);
+}
+}
+</style>
+</head>
+
+<body>
+
+<div class="container" id="mainContent">
+<div class="bear">🐻</div>
+<h1>Will You Be My Valentine, <span id="name">Dr.Rimee Awasthi</span>?</h1>
+<p class="subtitle">I've been gathering courage to ask you this...</p>
+<p class="closing">Every love story is beautiful, but ours is my favourite</p>
+
+<div class="buttons">
+<button id="yesBtn">Yes ❤️</button>
+<button id="noBtn">No</button>
+</div>
+</div>
+
+<div class="celebration" id="celebration">
+<div class="yay">Yayyyy!! 💖</div>
+<div class="spin">💍</div>
+<p style="margin-top:20px;font-size:20px;">Mai Janta tha you'd say yes...
+<br> I LOVE YOU SOO MUCH MERI PYARI GUDDAA.</p>
+</div>
+
+<script>
+const noBtn=document.getElementById("noBtn");
+const yesBtn=document.getElementById("yesBtn");
+const mainContent=document.getElementById("mainContent");
+const celebration=document.getElementById("celebration");
+
+const messages=["Nope, not an option!","Try again!","You sure about that?","Not happening!","Think again!"];
+let msgIndex=0;
+
+function moveNoButton(){
+const yesRect=yesBtn.getBoundingClientRect();
+let x,y;
+do{
+x=Math.random()*(window.innerWidth-100);
+y=Math.random()*(window.innerHeight-50);
+}while(
+x<yesRect.right &&
+x+100>yesRect.left &&
+y<yesRect.bottom &&
+y+50>yesRect.top
+);
+noBtn.style.position="fixed";
+noBtn.style.left=x+"px";
+noBtn.style.top=y+"px";
+noBtn.innerText=messages[msgIndex];
+msgIndex=(msgIndex+1)%messages.length;
+}
+
+noBtn.addEventListener("mouseover",moveNoButton);
+noBtn.addEventListener("click",moveNoButton);
+noBtn.addEventListener("touchstart",moveNoButton);
+
+function createHearts(){
+for(let i=0;i<15;i++){
+let heart=document.createElement("div");
+heart.className="heart";
+heart.innerHTML="❤️";
+heart.style.left=Math.random()*100+"vw";
+heart.style.fontSize=(Math.random()*20+20)+"px";
+heart.style.animationDuration=(Math.random()*5+5)+"s";
+document.body.appendChild(heart);
+}
+}
+
+createHearts();
+
+yesBtn.addEventListener("click",()=>{
+mainContent.style.display="none";
+celebration.style.display="flex";
+document.querySelectorAll(".heart").forEach(h=>h.remove());
+createConfetti();
+});
+
+function createConfetti(){
+for(let i=0;i<120;i++){
+let conf=document.createElement("div");
+conf.className="confetti";
+conf.style.left=Math.random()*100+"vw";
+conf.style.background=`hsl(${Math.random()*360},100%,50%)`;
+conf.style.animationDuration=(Math.random()*3+2)+"s";
+document.body.appendChild(conf);
+}
+}
+</script>
+
+</body>
+</html>
